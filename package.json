@@ -1,15 +1,17 @@
 {
-  "name": "tailord",
-  "version": "1.0.0",
-  "description": "Repository for tailord's code, assets, and IP.",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --watch --config webpack.development.js",
+    "release": "webpack --config webpack.production.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.2.3",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.67.0",
+    "webpack-cli": "^4.9.2"
+  },
   "dependencies": {
-    "firebase": "^9.23.0"
+    "firebase": "^9.6.5",
+    "firebaseui": "^6.0.0"
   }
 }
