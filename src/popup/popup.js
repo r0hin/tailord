@@ -1,5 +1,5 @@
 import { firebaseApp } from './firebase_config'
-import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const auth = getAuth(firebaseApp);
 setPersistence(auth, browserLocalPersistence)
@@ -41,6 +41,10 @@ $(`#signUpButton`).get(0).onclick = async () => {
   } catch (error) {
     alert(error.message);
   }
+}
+
+$(`#signOut`).get(0).onclick = async () => {
+  await signOut(auth);
 }
 
 $(`#testButton`).get(0).onclick = () => {

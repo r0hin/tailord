@@ -94,3 +94,35 @@ button.primary:hover {
 button.primary:active { 
   transform: scale(0.95);
 }
+
+#footerBar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 64px;
+  left: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--primary);
+}
+
+#footerBar > button {
+  margin: 12px;
+  border: none;
+  outline: none;
+  background-color: var(--primary);
+  color: var(--white);
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#footerBar > button i {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}

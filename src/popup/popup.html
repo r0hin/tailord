@@ -7,6 +7,7 @@
   <title>Document</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.compat.css"/>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="./src/css/popup.css">
 </head>
 
@@ -30,7 +31,14 @@
   <div id="signedIn" class="hidden animated fadeIn">
     <p id="siginedtext"></p>
     <button id="testButton">Execute background function</button>
+    <button id="signOut">sign out</button>
     <div id="response"></div>
+
+    <div id="footerBar">
+      <button id="homeTabButton" class="footerButton"><i class="bx bx-paste"></i>Fill</button>
+      <button id="homeTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
+      <button id="homeTabButton" class="footerButton"><i class="bx bx-cog"></i>Settings</button>
+    </div>
   </div>
   <script defer src="./popup.js"></script>
 </body>
