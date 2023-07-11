@@ -4,15 +4,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
+  <title>Document</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.compat.css"/>
   <link rel="stylesheet" href="./src/css/popup.css">
 </head>
 
 <body>
-  <div class="container">
-    <h1>TailorD</h1>
+  <div id="signedOut" class="hidden animated fadeIn">
+    <center>
+      <br><br><br><br><br>
+      <h1 class="title mainTitle animated fadeInUp fast">TailorD</h1>
+      <p class="tagline animated fadeIn delay-1s">Some tagline here.</p>
+      <br><br>
+      <div class="loginContainer animated fadeInUp delay-1s">
+        <input id="emailBox" class="loginBox" type="text" placeholder="Email Address" />
+        <input id="passwordBox" class="loginBox" type="password" placeholder="Password" />
+        <div class="loginButtons">
+          <button id="signUpButton" class="primary">Signup</button>
+          <button id="signInButton" class="primary">Login</button>
+        </div>
+      </div>
+    </center>
   </div>
+  <div id="signedIn" class="hidden animated fadeIn">
+    <p id="siginedtext"></p>
+    <button id="testButton">Execute background function</button>
+    <div id="response"></div>
+  </div>
+  <script defer src="./popup.js"></script>
 </body>
-
 </html>

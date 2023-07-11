@@ -17,6 +17,4 @@ const config = {
 // version: SDK 9
 const firebaseApp = initializeApp(config)
 
-export{
-    firebaseApp
-}
+export { firebaseApp }

@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { ProvidePlugin } = require('webpack');
 
 
 module.exports = {
@@ -40,6 +41,10 @@ module.exports = {
         { from: './src/css/*' }
       ],
     }),
+    new ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+    })
   ],
   output: {
     // chrome load uppacked extension looks for files under dist/* folder
