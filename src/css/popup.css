@@ -120,9 +120,25 @@ button.primary:active {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transform: translateY(22px) scale(1);
+  transition: all 0.3s ease-in-out;
+}
+
+#footerBar > button:active {
+  transform: translateY(22px) scale(0.95);
+  transition: all 0.2s;
 }
 
 #footerBar > button i {
   font-size: 1.5rem;
+  margin-bottom: 32px;
+  transition: all 0.3s ease-in-out;
+}
+
+#footerBar > button.active i {
   margin-bottom: 6px;
+}
+
+#footerBar > button.active {
+  transform: translateY(0px);
 }

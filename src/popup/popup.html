@@ -12,33 +12,53 @@
 </head>
 
 <body>
-  <div id="signedOut" class="hidden animated fadeIn">
-    <center>
-      <br><br><br><br><br>
-      <h1 class="title mainTitle animated fadeInUp fast">TailorD</h1>
-      <p class="tagline animated fadeIn delay-1s">Some tagline here.</p>
-      <br><br>
-      <div class="loginContainer animated fadeInUp delay-1s">
-        <input id="emailBox" class="loginBox" type="text" placeholder="Email Address" />
-        <input id="passwordBox" class="loginBox" type="password" placeholder="Password" />
-        <div class="loginButtons">
-          <button id="signUpButton" class="primary">Signup</button>
-          <button id="signInButton" class="primary">Login</button>
-        </div>
-      </div>
-    </center>
-  </div>
-  <div id="signedIn" class="hidden animated fadeIn">
-    <p id="siginedtext"></p>
-    <button id="testButton">Execute background function</button>
-    <button id="signOut">sign out</button>
-    <div id="response"></div>
 
-    <div id="footerBar">
-      <button id="homeTabButton" class="footerButton"><i class="bx bx-paste"></i>Fill</button>
-      <button id="homeTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
-      <button id="homeTabButton" class="footerButton"><i class="bx bx-cog"></i>Settings</button>
+  <div class="tab animated fadeIn" id="fillTab">
+    <div id="fillMeasurements"></div>
+    <div id="noFillMeasurements">
+      You have no measurements saved. Select the scan tabs to set or update your measurements. <br>
+      <button id="testButton">Execute background function</button>
+      <div id="response"></div>
     </div>
+    <p id="siginedtext"></p>
+  </div>
+  <div class="tab hidden animated fadeIn" id="scanTab">
+
+    <div id="measurements"></div>
+    <div id="noMeasurements">
+      You have no measurements saved. <br>
+      uid: <span id="uid"></span>
+    </div>
+
+  </div>
+  <div class="tab hidden animated fadeIn" id="settingsTab">
+
+    <div id="signedOut" class="hidden animated fadeIn">
+      <center>
+        <br><br><br>
+        <h1 class="title mainTitle animated fadeInUp fast">TailorD</h1>
+        <p class="tagline animated fadeIn delay-1s">Sign in to sync your measurements across devices!</p>
+        <br><br>
+        <div class="loginContainer animated fadeInUp delay-1s">
+          <input id="emailBox" class="loginBox" type="text" placeholder="Email Address" />
+          <input id="passwordBox" class="loginBox" type="password" placeholder="Password" />
+          <div class="loginButtons">
+            <button id="signUpButton" class="primary">Signup</button>
+            <button id="signInButton" class="primary">Login</button>
+          </div>
+        </div>
+      </center>
+    </div>
+    <div id="signedIn" class="hidden animated fadeIn">
+      You're signed in!
+      <button id="signOut">sign out</button>
+    </div>
+  </div>
+
+  <div id="footerBar">
+    <button id="fillTabButton" class="footerButton active"><i class="bx bx-paste"></i>Fill</button>
+    <button id="scanTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
+    <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
   </div>
   <script defer src="./popup.js"></script>
 </body>
