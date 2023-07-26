@@ -108,7 +108,6 @@ button.primary:active {
 }
 
 #footerBar > button {
-  margin: 12px;
   border: none;
   outline: none;
   background-color: var(--primary);
@@ -117,16 +116,24 @@ button.primary:active {
   cursor: pointer;
   position: relative;
   display: flex;
+  border-radius: 8px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: translateY(22px) scale(1);
+  transform: translateY(10px) scale(1);
   transition: all 0.3s ease-in-out;
+  padding-top: 32px;
+  width: 120px;
+  height: 100%;
 }
 
 #footerBar > button:active {
-  transform: translateY(22px) scale(0.95);
+  transform: translateY(10px) scale(0.95);
   transition: all 0.2s;
+}
+
+#footerBar > button:hover {
+  background-color: var(--secondary);
 }
 
 #footerBar > button i {
@@ -141,4 +148,39 @@ button.primary:active {
 
 #footerBar > button.active {
   transform: translateY(0px);
+  padding-top: 0px;
+  border-radius: 0px;
+}
+
+.scanButton {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 16px;
+  font-weight: 600;
+  margin: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  transform: scale(1);
+}
+
+#notScanning, #scanning {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#qrCode {
+  
 }

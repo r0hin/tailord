@@ -13,6 +13,7 @@
   "dependencies": {
     "firebase": "^9.6.5",
     "firebaseui": "^6.0.0",
-    "jquery": "^3.7.0"
+    "jquery": "^3.7.0",
+    "qrcode": "^1.5.3"
   }
 }

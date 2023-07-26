@@ -14,9 +14,11 @@
 <body>
 
   <div class="tab animated fadeIn" id="fillTab">
-    <div id="fillMeasurements"></div>
+    <div id="fillMeasurements">
+      You have measurements saved.<br>
+    </div>
     <div id="noFillMeasurements">
-      You have no measurements saved. Select the scan tabs to set or update your measurements. <br>
+      You have no measurements saved. Select the scan tabs to set your measurements. <br>
       <button id="testButton">Execute background function</button>
       <div id="response"></div>
     </div>
@@ -25,11 +27,20 @@
   <div class="tab hidden animated fadeIn" id="scanTab">
 
     <div id="measurements"></div>
-    <div id="noMeasurements">
-      You have no measurements saved. <br>
-      uid: <span id="uid"></span>
+      <div id="notScanning">
+        <div id="noMeasurements">You have no measurements saved.</div> 
+        <div id="yesMeasurements">Your body measurements are loaded! You can always redo your scans below:</div> 
+        <br>
+        <div class="row">
+          <button id="beginScanButton" class="scanButton">Create Scan</button>
+        </div>
+      </div>
+      <div id="scanning" class="hidden">
+        <canvas id="qrCode"></canvas>
+        <p>Scan this QR code on your phone. When you're finished measuring, select the button below.</p>
+        <button id="endScanButton" class="scanButton">Complete Scan</button>
+      </div>
     </div>
-
   </div>
   <div class="tab hidden animated fadeIn" id="settingsTab">
 
