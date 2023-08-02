@@ -13,6 +13,12 @@ onAuthStateChanged(auth, user => {
   if (user && user.email) {
     $(`#signedIn`).removeClass("hidden");
     $(`#signedOut`).addClass("hidden");
+
+    // TO CHANGE BACK TO USER.UID
+    chrome.storage.sync.set({'uid': "4bNJ7Z6WzKTqvpRjaBz4IpolIZ13"}, function() {
+      console.log('Settings saved');
+    });
+
   }
   else {
     $(`#signedOut`).removeClass("hidden");
@@ -38,23 +44,16 @@ onAuthStateChanged(auth, user => {
 async function loadMeasurements(user) {
   await onSnapshot(doc(db, `users/${user.uid}`), (userDoc) => {
     cacheUser = userDoc.data();
-
-
-
     if (userDoc.exists() && Object.keys(userDoc.data().measurements || {}).length) {
       // Measurements exist
       $(`#noMeasurements`).addClass("hidden");
       $(`#yesMeasurements`).removeClass("hidden");
-      $(`#noFillMeasurements`).addClass("hidden");
-      $(`#fillMeasurements`).removeClass("hidden");
       $(`#beginScanButton`).html(`Scan Again`);
     }
     else {
       // No measurements exist
       $(`#noMeasurements`).removeClass("hidden");
       $(`#yesMeasurements`).addClass("hidden");
-      $(`#noFillMeasurements`).removeClass("hidden");
-      $(`#fillMeasurements`).addClass("hidden");
       $(`#beginScanButton`).html(`Begin Scan`);
     }
 
@@ -130,8 +129,6 @@ $(`#endScanButton`).get(0).onclick = async () => {
 
   const data = jsonData.data;
 
-  console.log(data)
-
   updateDoc(doc(db, `users/${user.uid}`), {
     latest_access_code: "",
     measurements: data,
@@ -164,23 +161,12 @@ $(`#signOut`).get(0).onclick = async () => {
   await signOut(auth);
 }
 
-$(`#testButton`).get(0).onclick = () => {
-  chrome.runtime.sendMessage({ message: "scrape" }, response => {
-    console.log(response.message);
-    $(`#response`).text(`${response.message}`);
-  });
-}
-
 function switchTab(tab) {
   $(`.footerButton`).removeClass("active");
   $(`#${tab}TabButton`).addClass("active");
 
   $(`.tab`).addClass("hidden");
   $(`#${tab}Tab`).removeClass("hidden");
-}
-
-$(`#fillTabButton`).get(0).onclick = () => {
-  switchTab("fill");
 }
 
 $(`#scanTabButton`).get(0).onclick = () => {

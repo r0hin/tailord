@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "version": "0.0.1",
+  "version": "1.0.1",
   "name": "TailorD",
-  "description": "TailorD extension description",
+  "description": "TailorD facilitates body measurement scanning and provides your accurate site-specific size for online shoppers!",
   "action": {
     "default_popup": "./popup.html",
     "default_icon": {

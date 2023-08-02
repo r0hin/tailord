@@ -4,21 +4,24 @@ const { getFirestore } = require("firebase-admin/firestore")
 
 initializeApp();
 
-exports.addMeasurements = onRequest(async (request, response) => {
-  if (request.method !== "POST") {
-    response.status(400).send("Invalid request method");
-    return;
-  }
-
-  const postData = request.body;
-
-  const uid = postData.uid;
-  const measurements = postData.measurements;
+exports.getMeasurements = onRequest(async (request, response) => {
+  response.set('Access-Control-Allow-Origin', '*');
+  const uid = request.query.uid
+  console.log(uid)
 
   const db = getFirestore();
-  db.collection("users").doc(uid).set(measurements, {
-    merge: true
-  })
 
-  response.status(200).send("OK.");
+  const userDoc = await db.doc(`users/${uid}`).get();
+  if (userDoc.exists) {
+    const measurements = userDoc.data().measurements;
+    return response.status(200).send({
+      measurements: measurements
+    });
+  }
+  else {
+    return response.status(200).send({
+      measurements: {}
+    });
+  }
+
 });
