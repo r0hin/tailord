@@ -268,14 +268,8 @@ if (matchedID) {
   })
 
   let uniqueCategories = new Set();
-  let uniqueStyles = new Set();
   idFiltered.forEach((e) => {
     uniqueCategories.add(e.matrix)
-
-    const styleList = e.style.replaceAll(" ", "").split(",")
-    styleList.forEach((e) => {
-      uniqueStyles.add(e)
-    });
   });
 
   uniqueCategories.forEach((e) => {
@@ -285,12 +279,27 @@ if (matchedID) {
     document.getElementsByClassName("contentSelection")[0].appendChild(option)
   });
 
-  uniqueStyles.forEach((e) => {
-    const option = document.createElement("option")
-    option.value = e
-    option.innerHTML = e
-    document.getElementsByClassName("contentSelection")[1].appendChild(option)
-  })
+  document.getElementsByClassName("contentSelection")[0].onchange = () => {
+    const matrix = document.getElementsByClassName("contentSelection")[0].value
+    // Generate styles
+    document.getElementsByClassName("contentSelection")[1].innerHTML = ""
+    let uniqueStyles = new Set();
+
+    idFiltered.forEach((e) => {
+      if (e.matrix == matrix) {
+        e.style.replaceAll(" ", "").split(",").forEach((e) => {
+          uniqueStyles.add(e)
+        })
+      }
+    });
+
+    uniqueStyles.forEach((e) => {
+      const option = document.createElement("option")
+      option.value = e
+      option.innerHTML = e
+      document.getElementsByClassName("contentSelection")[1].appendChild(option)
+    })
+  }
 }
 
 async function getMeasurements(uid) {
@@ -326,7 +335,7 @@ async function getMeasurements(uid) {
   });
 
   const filteredDataToMeasurementKeyMap = {
-    "bust or chest": "shoulderacross",
+    "bust or chest": "chest",
     "hip": "hip",
     "sleeve tall": "armslength",
   }
@@ -357,7 +366,7 @@ async function getMeasurements(uid) {
       measurementsSpecific.forEach((measurement) => {
         if (measurement.pointName == filteredDataToMeasurementKeyMap[measurementKey]) {
           // Found measurement
-          scannedMeasurement = parseFloat(measurement.valueIncm);
+          scannedMeasurement = parseFloat(measurement.valueIninch);
         }
       });
 
@@ -373,9 +382,17 @@ async function getMeasurements(uid) {
         candidateMeasurement = parseFloat(candidateMeasurement);
       }
 
-      // Get difference
       const difference = Math.abs(scannedMeasurement - candidateMeasurement);
-      sumOfDifference += difference;
+
+      if (!isNaN(difference)) {
+        sumOfDifference += difference;
+        console.log(`Different for ${measurementKey}: ${difference} on size ${candidate.size}`)
+      }
+      else {
+        console.log(`Skipping ${measurementKey} because there is no readable data`)
+      }
+
+
     });
 
     results[candidate.size].difference = sumOfDifference;
