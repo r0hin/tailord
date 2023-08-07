@@ -11,13 +11,11 @@
       "48": "./src/icons/logo48.png",
       "128": "./src/icons/logo128.png"
     },
-    "default_title": "Getting Started Firebase + MV3!"
+    "default_title": "TailorD"
   },
   "permissions": [
     "storage",
-    "activeTab",
-    "scripting",
-    "identity"
+    "activeTab"
   ],
   "content_scripts": [
     {
