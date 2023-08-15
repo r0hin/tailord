@@ -182,6 +182,103 @@ button.primary:active {
   align-items: center;
 }
 
-#qrCode {
-  
+#measurementsTab {
+  height: calc(100% - 64px);
+  overflow-y: auto;
+}
+
+.scanTabTool {
+  background-color: var(--tertiary);
+  color: black;
+  padding: 8px;
+  border-radius: 5px;
+  position: relative;
+  padding-left: 48px;
+  margin-bottom: 10px;
+}
+
+.scanTabTool i:first-child {
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+}
+
+.userProfile {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: var(--white);
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+
+}
+
+.userProfile b {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.userProfile img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+#signOut, #contactSupport {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#deleteAccountButton {
+  background-color: transparent;
+  color: red;
+  opacity: 0.3;
+}
+
+.bottomAligned {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--white);
+  border-radius: 8px;
+}
+
+table, th, td {
+  border: 1px solid var(--offwhite);
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+
+.measurementTableNameCell {
+  position: relative;
+  padding-left: 24px;
+}
+
+.measurementTableNameCell i {
+  position: absolute;
+  cursor: pointer;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  transition: all 0.2s ease-in-out;
+}
+
+.measurementTableNameCell i:hover {
+  transform: scale(1.1) translateY(-50%);
+  transition: all 0.2s ease-in-out;
 }

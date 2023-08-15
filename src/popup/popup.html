@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.compat.css"/>
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="./src/css/popup.css">
+
+
+  <!-- favicon to icons/logo128.png -->
+  <link rel="icon" type="image/png" href="../icons/logo128.png" sizes="128x128" />
 </head>
 
 <body>
@@ -16,11 +20,36 @@
 
     <div id="measurements"></div>
       <div id="notScanning">
-        <div id="noMeasurements" class="hidden">You have no measurements saved. To get sizing data, you need to begin scanning!</div> 
-        <div id="yesMeasurements" class="hidden">Your body measurements are loaded! You can always redo your scans below:</div> 
+        <div id="noMeasurements" class="hidden">
+          <div class="scanTabTool">
+            <i class="bx bx-camera"></i>
+            You have no measurements saved. Scan the QR code below on your smartphone to quickly get measured.
+          </div>
+          
+          <div class="scanTabTool">
+            <i class="bx bxs-t-shirt"></i>
+            After you're measured, you will be able to view your measurements here and get size recommendations on select clothing retailers.
+          </div>
+
+
+        </div> 
+        <div id="yesMeasurements" class="hidden">
+          <div class="scanTabTool">
+            <i class="bx bx-check"></i>
+            Your body measurements are loaded! You can always redo your scans below. View your measurements by selecting the <i class="bx bx-clipboard"></i> tab
+          </div>
+          <div class="scanTabTool">
+            <i class="bx bx-bulb"></i>
+            Find the orange hangar icon in the bottom right corner of select clothing retails to get the site-specific sizing data!
+          </div>
+          <div class="scanTabTool">
+            <i class="bx bx-help-circle"></i>
+            Visit our website at tailord.ca for more information and the complete supported retailer list.
+          </div>
+        </div> 
         <br>
         <div class="row">
-          <button id="beginScanButton" class="scanButton">Create Scan</button>
+          <button id="beginScanButton" class="scanButton">Create a Scan</button>
         </div>
       </div>
       <div id="scanning" class="hidden">
@@ -29,6 +58,32 @@
         <button id="endScanButton" class="scanButton">Complete Scan</button>
       </div>
     </div>
+  </div>
+  <div class="tab hidden animated fadeIn" id="measurementsTab">
+    <table>
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+      </tr>
+      <tr>
+        <td>Age</td>
+        <td id="age">...</td>
+      </tr>
+      <tr>
+        <td>Height</td>
+        <td id="height">...</td>
+      </tr>
+      <tr>
+        <td>Weight</td>
+        <td id="weight">...</td>
+      </tr>
+      <tr>
+        <td>Gender</td>
+        <td id="gender">...</td>
+      </tr>
+    </table>
+    <br>
+    <table id="measurementTable"></table>
   </div>
   <div class="tab hidden animated fadeIn" id="settingsTab">
 
@@ -51,16 +106,28 @@
       </center>
     </div>
     <div id="signedIn" class="hidden animated fadeIn">
-      You're signed in!<br><br>
-      <button class="primary" id="signOut">Sign Out</button>
+      
+      <div class="userProfile">
+        <img src="https://firebasestorage.googleapis.com/v0/b/tailord5.appspot.com/o/default.png?alt=media" alt="">
+        <div>
+          <b>Signed in as</b>
+          <div id="email">...</div>
+        </div>
+      </div>
 
-      <br><br>
-      By using TailorD, you agree to the <a href="https://tailord.ca/terms.pdf">Terms of Service</a>.
+      <button class="primary" id="contactSupport">Contact Support</button>
+      <button class="primary" id="signOut">Sign Out</button>
+      
+      <div class="bottomAligned">
+        By using TailorD, you agree to the <a href="https://tailord.ca/terms.pdf">Terms of Service</a>.
+          <button class="primary" id="deleteAccountButton">Clear data and delete account</button>
+      </div>
     </div>
   </div>
 
   <div id="footerBar">
     <button id="scanTabButton" class="footerButton active"><i class="bx bx-scan"></i>Scan</button>
+    <button id="measurementsTabButton" class="footerButton hidden"><i class="bx bx-clipboard"></i>Scans</button>
     <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
   </div>
   <script defer src="./popup.js"></script>
