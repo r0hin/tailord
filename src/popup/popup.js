@@ -295,5 +295,5 @@ $(`#deleteAccountButton`).get(0).onclick = () => {
 }
 
 $(`#contactSupport`).get(0).onclick = () => {
-  window.open("mailto:support@tailord.ca");
+  window.open("mailto:jacksdorr@icloud.com");
 }
