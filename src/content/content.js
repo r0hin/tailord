@@ -460,6 +460,18 @@ async function getMeasurements(uid) {
       break;
   }
 
+  if (lowestDifferenceSize.size && lowestDifferenceSize["numeric"]) {
+    displaySize += ` / ${lowestDifferenceSize.size} (Numeric)`;
+  }
+
+  if (lowestDifferenceSize.size && lowestDifferenceSize["pants"]) {
+    displaySize += ` / ${lowestDifferenceSize.size} (Pants)`;
+  }
+
+  if (!lowestDifferenceSize.size && lowestDifferenceSize["numeric"] && lowestDifferenceSize["pants"]) {
+    displaySize += ` / ${lowestDifferenceSize["pants"]} (Pants)`;
+  }
+
   document.getElementById("tailordmainsize").innerHTML = displaySize;
 
   if ((displaySize !== lowestDifferenceSize.us) && lowestDifferenceSize.us) {
