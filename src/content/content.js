@@ -406,8 +406,6 @@ async function getMeasurements(uid) {
       else {
         console.log(`Skipping ${measurementKey} because there is no readable data`)
       }
-
-
     });
 
     results[activeSize].difference = sumOfDifference;
