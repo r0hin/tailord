@@ -22,7 +22,6 @@ If either values are a range, the average is used:
 
 ```js
   if (candidateMeasurement.includes("-")) {
-    // Get average
     const split = candidateMeasurement.split("-");
     const first = parseFloat(split[0]);
     const second = parseFloat(split[1]);
@@ -33,11 +32,7 @@ If either values are a range, the average is used:
 These candidates are then sorted by their difference value, and the top 1 is returned to the user:
 
 ```js
-let lowestDifference = null;
-let lowestDifferenceSize = null;
-
-const resultsKeys = Object.keys(results);
-resultsKeys.forEach((resultKey) => {
+Object.keys(results).forEach((resultKey) => {
   const result = results[resultKey];
   if (lowestDifference == null || result.difference < lowestDifference) {
     lowestDifference = result.difference;
@@ -46,6 +41,6 @@ resultsKeys.forEach((resultKey) => {
 })
 ```
 
-Some processing is done to calculate the listed size, US size, pant size, etc.
+Some processing is done to calculate the listed size, US, pant, etc.
 
 <b>The complete algorithm needs to be much improved and organized. Code quality is very bad right now, but this is a general idea of how it works.</b>
