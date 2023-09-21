@@ -262,6 +262,7 @@ if (matchedID) {
     }
 
     document.getElementById(`resultsPanel`).classList.remove("hidden");
+
     chrome.storage.sync.get(['uid'], function(items) {
       uid = items.uid
       getMeasurements(uid)
@@ -309,9 +310,11 @@ if (matchedID) {
   }
 }
 
-async function getMeasurements(uid) {
+async function getMeasurements(uid) { // Redone
+  const BUFFER = 1.0 // Add 1inch to all scanned measurements to produce a higher chance for a higher clothing size.
+
   document.getElementById("tailordmainsize").innerHTML = "..."
-  document.getElementById("tailordussize").innerHTML = "..." // (U.S.: x)
+  document.getElementById("tailordussize").innerHTML = "Calculating..."
 
   const matrix = document.getElementsByClassName("contentSelection")[0].value
   const style = document.getElementsByClassName("contentSelection")[1].value
@@ -321,43 +324,42 @@ async function getMeasurements(uid) {
   })
 
   const jsonData = await response.json();
-  // #tailordmainsize, #tailordussize
+  const userMeasurementsFull = jsonData.measurements;
 
-  const measurements = jsonData.measurements;
-  console.log(measurements)
-
-  if (!Object.keys(measurements).length) {
+  try {
+    if (!Object.keys(userMeasurementsFull).length) {
+      document.getElementById("tailordmainsize").innerHTML = `N/A (No measurements)`;
+      document.getElementById("tailordussize").innerHTML = `(U.S.: N/A)`;
+      return;
+    }
+  } catch (error) {
     document.getElementById("tailordmainsize").innerHTML = `N/A (No measurements)`;
     document.getElementById("tailordussize").innerHTML = `(U.S.: N/A)`;
     return;
   }
 
-  const measurementsSpecific = measurements.measurement;
+  const userMeasurements = userMeasurementsFull.measurement; // Structured this way for some reason.
 
-  console.log(matchedID)
-  console.log(matrix)
-  console.log(style)
-  // Filter data which matches matrix and style
-  const filteredData = data.filter((e) => {
-    return e.id == matchedID && e.matrix == matrix && e.style.replaceAll(" ", "").split(",").includes(style);
+  // Valid candidates are from the dataset, specific to the site.
+  const validCandidates = data.filter((e) => {
+    return e.id == matchedID && e.matrix.replaceAll(" ", "").split(",").includes(matrix) && e.style.replaceAll(" ", "").split(",").includes(style);
   });
 
-  const filteredDataToMeasurementKeyMap = {
+  const tailordtomirrorsize = {
     "bust or chest": "chest",
     "hip": "hip",
-    "sleeve tall": "armslength",
+    "sleeve": "armslength",
   }
 
   let results = {};
+  let atLeastOneComparison = false;
 
+  const validCandidateKeys = Object.keys(validCandidates);
+  validCandidateKeys.forEach((index) => {
+    // Index is a unique numeric value corresponding to position in validCandidates
 
-  console.log(filteredData);
-
-  const filteredKeys = Object.keys(filteredData);
-  filteredKeys.forEach((candidateIndex) => { // Filtered data candidate test
-    const candidate = filteredData[candidateIndex];
-    const activeSize = candidate.size || candidate["numeric size"] || candidate["us size"] || candidate["pant size"]
-    results[activeSize] = {
+    const candidate = validCandidates[index] 
+    results[index] = { // Set metadata associated with this candidate.
       size: candidate.size,
       numeric: candidate["numeric size"],
       us: candidate["us size"],
@@ -366,117 +368,81 @@ async function getMeasurements(uid) {
 
     let sumOfDifference = 0;
 
-    // Test all attributes of candidate
-    const measurementKeys = Object.keys(filteredDataToMeasurementKeyMap);
-    measurementKeys.forEach((measurementKey) => {
+    // Check each available mapping
+    const tailordheadings = Object.keys(tailordtomirrorsize);
+    tailordheadings.forEach((tailordheading) => {
+      const mirrorsizeheading = tailordtomirrorsize[tailordheading];
 
-      // Get scanned measurement
       let scannedMeasurement = null;
       let candidateMeasurement = null;
 
-      measurementsSpecific.forEach((measurement) => {
-        if (measurement.pointName == filteredDataToMeasurementKeyMap[measurementKey]) {
-          // Found measurement
-          scannedMeasurement = parseFloat(measurement.valueIninch);
+      userMeasurements.forEach((e) => {
+        (e.pointName == mirrorsizeheading) ? (scannedMeasurement = (parseFloat(e.valueIninch) + BUFFER)) : (null)
+      })
+
+      candidateMeasurement = candidate[`${tailordheading}`];
+
+      if (scannedMeasurement && candidateMeasurement) {
+        if (candidateMeasurement.includes("-")) {
+          candidateMeasurement = (parseFloat(candidateMeasurement.split("-")[0]) + parseFloat(candidateMeasurement.split("-")[1])) / 2;
         }
-      });
 
-      candidateMeasurement = candidate[`${measurementKey}`];
-      if (!candidateMeasurement) {
-        // There is no measurement available
-        return;
-      }
-      if (candidateMeasurement.includes("-")) {
-        // Get average
-        const split = candidateMeasurement.split("-");
-        const first = parseFloat(split[0]);
-        const second = parseFloat(split[1]);
-        candidateMeasurement = (first + second) / 2;
-      }
-      else {
-        candidateMeasurement = parseFloat(candidateMeasurement);
-      }
-
-      const difference = Math.abs(scannedMeasurement - candidateMeasurement);
-
-      if (!isNaN(difference)) {
+        const difference = Math.abs(scannedMeasurement - candidateMeasurement);
         sumOfDifference += difference;
-        console.log(`Different for ${measurementKey}: ${difference} on size ${activeSize}`)
-      }
-      else {
-        console.log(`Skipping ${measurementKey} because there is no readable data`)
+        atLeastOneComparison = true;
       }
     });
 
-    results[activeSize].difference = sumOfDifference;
+    results[index].difference = sumOfDifference;
   });
 
+  if (!atLeastOneComparison) {
+    document.getElementById("tailordmainsize").innerHTML = `N/A (Missing data)`;
+    document.getElementById("tailordussize").innerHTML = `(U.S.: N/A)`;
+    return;
+  }
+
+  // The lowest difference is the best fit
+
   let lowestDifference = null;
-  let lowestDifferenceSize = null;
+  let winner = null;
 
-  const resultsKeys = Object.keys(results);
-  resultsKeys.forEach((resultKey) => {
-    const result = results[resultKey];
-    if (lowestDifference == null || result.difference < lowestDifference) {
-      lowestDifference = result.difference;
-      lowestDifferenceSize = result
+  Object.keys(results).forEach((index) => {
+    const candidate = results[index];
+    if (!lowestDifference || candidate.difference < lowestDifference) {
+      lowestDifference = candidate.difference;
+      winner = index;
     }
-  })
+  });
 
-  let displaySize = "";
+  // If main size is available, show it prominently and all others below
+  // If no main size, show numeric size and others lower
+  // If no main size and numeric size, show pant size and US size lower
+  // If no main size and numeric size and pant size, show only US size
 
-  switch (lowestDifferenceSize.size) {
-    case "xxs":
-      displaySize = "XXS";
-      break;
-    case "xs":
-      displaySize = "XS";
-      break;
-    case "s":
-      displaySize = "Small (S)";
-      break;
-    case "m":
-      displaySize = "Medium (M)";
-      break;
-    case "l":
-      displaySize = "Large (L)";
-      break;
-    case "xl":
-      displaySize = "XL";
-      break;
-    case "xxl":
-      displaySize = "XXL";
-      break;
-    case "xxxl":
-      displaySize = "XXXL";
-      break;
-    case "xxxs":
-      displaySize = "XXXS";
-      break;
-    default:
-      displaySize = lowestDifferenceSize["numeric"] || lowestDifferenceSize["pant"] || lowestDifferenceSize["us"] || "N/A";
-      break;
+  const winnerData = results[winner];
+  const winnerSize = winnerData.size;
+  const winnerNumeric = winnerData.numeric;
+  const winnerUS = winnerData.us;
+  const winnerPant = winnerData.pant;
+
+  if (winnerSize) {
+    document.getElementById("tailordmainsize").innerHTML = winnerSize.toUpperCase();
+    const othersString = `${winnerNumeric ? `Numeric: ${winnerNumeric}` : ``}${winnerPant ? `, Pant: ${winnerPant}` : ``}${winnerUS ? `, U.S.: ${winnerUS}` : ``}`
+    document.getElementById("tailordussize").innerHTML = othersString;
   }
-
-  if (lowestDifferenceSize.size && lowestDifferenceSize["numeric"]) {
-    displaySize += ` / ${lowestDifferenceSize.size} (Numeric)`;
+  else if (winnerNumeric) {
+    document.getElementById("tailordmainsize").innerHTML = winnerNumeric;
+    const othersString = `${winnerPant ? `Pant: ${winnerPant}` : ``}${winnerUS ? `, U.S.: ${winnerUS}` : ``}`
+    document.getElementById("tailordussize").innerHTML = othersString;
   }
-
-  if (lowestDifferenceSize.size && lowestDifferenceSize["pants"]) {
-    displaySize += ` / ${lowestDifferenceSize.size} (Pants)`;
-  }
-
-  if (!lowestDifferenceSize.size && lowestDifferenceSize["numeric"] && lowestDifferenceSize["pants"]) {
-    displaySize += ` / ${lowestDifferenceSize["pants"]} (Pants)`;
-  }
-
-  document.getElementById("tailordmainsize").innerHTML = displaySize;
-
-  if ((displaySize !== lowestDifferenceSize.us) && lowestDifferenceSize.us) {
-    // Show U.S. size if it is different
-    document.getElementById("tailordussize").innerHTML = `(U.S.: ${lowestDifferenceSize.us})`;
+  else if (winnerPant) {
+    document.getElementById("tailordmainsize").innerHTML = winnerPant;
+    const othersString = `${winnerUS ? `U.S.: ${winnerUS}` : ``}`
   }
   else {
-    document.getElementById("tailordussize").innerHTML = "";
+    document.getElementById("tailordmainsize").innerHTML = winnerUS;
+    document.getElementById("tailordussize").innerHTML = ``;
   }
+
 }
