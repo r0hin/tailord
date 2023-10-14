@@ -279,7 +279,7 @@ if (matchedID) {
   idFiltered.forEach((e) => {
     uniqueCategories.add(e.matrix)
   });
-
+  
   uniqueCategories.forEach((e) => {
     const option = document.createElement("option")
     option.value = e
@@ -295,16 +295,30 @@ if (matchedID) {
 
     idFiltered.forEach((e) => {
       if (e.matrix == matrix) {
-        e.style.replaceAll(" ", "").split(",").forEach((e) => {
-          uniqueStyles.add(e)
+        e.style.split(",").forEach((e) => {
+          let display = e.trim();
+          display = display.charAt(0).toUpperCase() + display.slice(1);
+          // Add spaces around & if there is none
+          if (display.includes("&")) {
+            if (display.charAt(display.indexOf("&") - 1) != " ") {
+              display = display.replaceAll("&", " &")
+            }
+            if (display.charAt(display.indexOf("&") + 1) != " ") {
+              display = display.replaceAll("&", "& ")
+            }
+          }
+
+          uniqueStyles.add(`${e}...${display}`)
         })
       }
     });
 
+    console.log(uniqueStyles)
+
     uniqueStyles.forEach((e) => {
       const option = document.createElement("option")
-      option.value = e
-      option.innerHTML = e
+      option.value = e.split("...")[0]
+      option.innerHTML = e.split("...")[1]
       document.getElementsByClassName("contentSelection")[1].appendChild(option)
     })
   }
