@@ -412,7 +412,7 @@ async function getMeasurements(uid) { // Redone
 
   if (!atLeastOneComparison) {
     document.getElementById("tailordmainsize").innerHTML = `N/A (Missing data)`;
-    document.getElementById("tailordussize").innerHTML = `(U.S.: N/A)`;
+    document.getElementById("tailordussize").innerHTML = `Sorry! We don't fully support this combination yet.`;
     return;
   }
 
