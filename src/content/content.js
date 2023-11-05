@@ -362,6 +362,7 @@ async function getMeasurements(uid) { // Redone
   const tailordtomirrorsize = {
     "bust or chest": "chest",
     "hip": "hip",
+    "waist": "waist",
     "sleeve": "armslength",
   }
 
