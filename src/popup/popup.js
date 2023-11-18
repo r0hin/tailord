@@ -15,7 +15,7 @@ onAuthStateChanged(auth, user => {
     $(`#signedOut`).addClass("hidden");
 
     // TO CHANGE BACK TO USER.UID
-    chrome.storage.sync.set({'uid': "4bNJ7Z6WzKTqvpRjaBz4IpolIZ13"}, function() {
+    chrome.storage.sync.set({'uid': user.uid}, function() {
       console.log('Settings saved');
     });
 
@@ -79,13 +79,34 @@ async function loadMeasurements(user) {
           <th>Value (In)</th>
         </tr>
       `)
+
       userDoc.data().measurements.measurement.forEach((measurement) => {
         $(`#measurementTable`).append(`
           <tr>
             <td class="measurementTableNameCell"><i id="infoButton${measurement.pointName}" class="bx bx-info-circle"></i> ${measurement.displayName}</td>
-            <td>${Math.ceil(parseFloat(measurement.valueIninch))}</td>
+            <td class="editableCell" id="${measurement.pointName}editable">${Math.ceil(parseFloat(measurement.valueIninch))}</td>
           </tr>
         `)
+
+        $(`#${measurement.pointName}editable`).get(0).onclick = async () => {
+          let measurements = userDoc.data().measurements;
+          const newValue = prompt(`Enter a new value for ${measurement.displayName} in inches.`);
+
+          if (newValue && parseFloat(newValue)) {
+            measurements.measurement.forEach((measurementCheck) => {
+              if (measurement.pointName === measurementCheck.pointName) {
+                measurements.measurement[measurements.measurement.indexOf(measurementCheck)].valueIninch = newValue;
+              }
+            })
+
+            await updateDoc(doc(db, `users/${user.uid}`), {
+              measurements: measurements,
+            });
+          }
+          else {
+            alert("Invalid value.")
+          }
+        }
 
         $(`#infoButton${measurement.pointName}`).get(0).onclick = () => {
           alert(measurement.description);
@@ -130,10 +151,14 @@ async function loadMeasurements(user) {
 
     await setDoc(doc(db, `users/${user.uid}`), {
       latest_access_code: accessCode,
-    });
+    }, {merge: true});
 
     showQRCode(accessCode)
   }
+}
+
+window.editMeasurement = (pointName) => {
+  alert(pointName)
 }
 
 function showQRCode(accessCode) {

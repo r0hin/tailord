@@ -313,8 +313,6 @@ if (matchedID) {
       }
     });
 
-    console.log(uniqueStyles)
-
     uniqueStyles.forEach((e) => {
       const option = document.createElement("option")
       option.value = e.split("...")[0]
@@ -336,6 +334,7 @@ async function getMeasurements(uid) { // Redone
   })
 
   const jsonData = await response.json();
+
   const userMeasurementsFull = jsonData.measurements;
 
   try {
@@ -389,6 +388,7 @@ async function getMeasurements(uid) { // Redone
       let scannedMeasurement = null;
       let candidateMeasurement = null;
 
+
       userMeasurements.forEach((e) => {
         (e.pointName == mirrorsizeheading) ? (scannedMeasurement = (Math.ceil(parseFloat(e.valueIninch)))) : (null)
       })
@@ -396,6 +396,9 @@ async function getMeasurements(uid) { // Redone
       candidateMeasurement = candidate[`${tailordheading}`];
 
       if (scannedMeasurement && candidateMeasurement) {
+
+        console.log("Comparing ", scannedMeasurement, candidateMeasurement)
+
         if (candidateMeasurement.includes("-")) {
           candidateMeasurement = (parseFloat(candidateMeasurement.split("-")[0]) + parseFloat(candidateMeasurement.split("-")[1])) / 2;
         }

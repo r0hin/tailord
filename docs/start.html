@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Login | TailorD - Get your perfect size when shopping online</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <link href="./images/icon.png" rel="icon" />
+  <link href="./css/style.css" rel="stylesheet" />
+  <link href="./css/start.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <img src="images/logo.png">
+      <div>
+        <a href="./" class="navLink">Home</a>
+        <a href="./about" class="navLink">About</a>
+        <a href="./partners" class="navLink">Partners</a>
+        <a href="./extensions" class="primary">Add to Chrome</a>
+      </div>
+    </nav>
+
+    <section class="landing">
+      <div class="landingText">
+        <h1 data-aos="fade-up">Let's get you setup!</h1>
+        <br><br>
+      </div>
+    </section>
+
+    <div id="signedOut" class="hidden">
+      <div class="form">
+        <input placeholder="Email" id="email">
+        <input placeholder="Password" type="password" id="password">
+  
+        <br><br>
+        <center>
+          <button onclick="createAccount()" class="primary">Create Account</button>
+          <button onclick="signIn()" class="primary">Sign In</button>
+        </center>
+      </div>
+    </div>
+    <div id="signedIn" class="hidden">
+      <p id="note"></p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footerContent">
+      <div>
+        <b>Product</b>
+        <a class="footerLink" href="">Download</a>
+        <a class="footerLink" href="">How it works</a>
+        <a class="footerLink" href="">Video tutorials</a>
+        <a class="footerLink" href="">FAQ</a>
+      </div>
+      <div>
+        <b>More</b>
+        <a class="footerLink" href="">About</a>
+        <a class="footerLink" href="">Team</a>
+        <a class="footerLink" href="">Contact us</a>
+      </div>
+      <div>
+        <b>Legal</b>
+        <a class="footerLink" href="">Terms of Service</a>
+        <a class="footerLink" href="">Privacy Policy</a>
+      </div>
+    </div>
+
+    <br><br>
+    <center>
+      <p>© 2024 TailorD</p>
+      <small class="gray">Made with ❤️ by <a class="gray" href="https://r0h.in">Rohin</a> and <a class="gray"
+          href="linkedin.com/in/jack-orr-canada">Jack</a></small>
+    </center>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-auth-compat.js"></script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="./js/index.js"></script>
+  <script src="./js/start.js"></script>
+
+</body>
+
+</html>
