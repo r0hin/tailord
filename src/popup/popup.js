@@ -68,7 +68,9 @@ async function loadMeasurements(user) {
       $(`#age`).text(userDoc.data().measurements.age);
       $(`#height`).text(userDoc.data().measurements.height);
       $(`#weight`).text(userDoc.data().measurements.weight);
-      $(`#gender`).text(userDoc.data().measurements.gender);
+      const gender = userDoc.data().measurements.gender;
+      const cpitalizedGender = gender.charAt(0).toUpperCase() + gender.slice(1);
+      $(`#gender`).text(cpitalizedGender);
 
       $(`#measurementTable`).empty();
       $(`#measurementTable`).append(`
@@ -81,7 +83,7 @@ async function loadMeasurements(user) {
         $(`#measurementTable`).append(`
           <tr>
             <td class="measurementTableNameCell"><i id="infoButton${measurement.pointName}" class="bx bx-info-circle"></i> ${measurement.displayName}</td>
-            <td>${measurement.valueIninch}</td>
+            <td>${Math.ceil(parseFloat(measurement.valueIninch))}</td>
           </tr>
         `)
 

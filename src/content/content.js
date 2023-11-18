@@ -325,8 +325,6 @@ if (matchedID) {
 }
 
 async function getMeasurements(uid) { // Redone
-  const BUFFER = 1.0 // Add 1inch to all scanned measurements to produce a higher chance for a higher clothing size.
-
   document.getElementById("tailordmainsize").innerHTML = "..."
   document.getElementById("tailordussize").innerHTML = "Calculating..."
 
@@ -392,7 +390,7 @@ async function getMeasurements(uid) { // Redone
       let candidateMeasurement = null;
 
       userMeasurements.forEach((e) => {
-        (e.pointName == mirrorsizeheading) ? (scannedMeasurement = (parseFloat(e.valueIninch) + BUFFER)) : (null)
+        (e.pointName == mirrorsizeheading) ? (scannedMeasurement = (Math.ceil(parseFloat(e.valueIninch)))) : (null)
       })
 
       candidateMeasurement = candidate[`${tailordheading}`];
