@@ -130,6 +130,11 @@ async function loadMeasurements(user) {
   })
   
   $(`#beginScanButton`).get(0).onclick = async () => {
+    if (!user.email) {
+      switchTab("settings");
+      return;
+    }
+
     const response = await fetch(`https://api.user.mirrorsize.com/api/webBrowser/generateAccessCode/`, {
       method: "POST",
       headers: {
