@@ -219,6 +219,12 @@ $(`#endScanButton`).get(0).onclick = async () => {
 $(`#signInButton`).get(0).onclick = async () => {
   const email = $(`#emailBox`).val();
   const password = $(`#passwordBox`).val();
+
+  if (!email || !password) {
+    alert("Please enter an email and password to sign in.");
+    return;
+  }
+
   let toPreserveMeasurements = false;
   const measurements = cacheUser ? cacheUser.measurements : null;
 
@@ -241,13 +247,18 @@ $(`#signInButton`).get(0).onclick = async () => {
       }
     }
   } catch (error) {
-    alert(error.message);
+    alert(error.message.replace("Firebase: ", ""));
   }
 }
 
 $(`#signUpButton`).get(0).onclick = async () => {
   const email = $(`#emailBox`).val();
   const password = $(`#passwordBox`).val();
+
+  if (!email || !password) {
+    alert("Please enter an email and password to sign in.");
+    return;
+  }
 
   let toPreserveMeasurements = false;
   const measurements = cacheUser ? cacheUser.measurements : null;
@@ -270,7 +281,7 @@ $(`#signUpButton`).get(0).onclick = async () => {
       }
     }
   } catch (error) {
-    alert(error.message);
+    alert(error.message.replace("Firebase: ", ""));
   }
 }
 
