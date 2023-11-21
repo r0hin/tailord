@@ -15,6 +15,11 @@ function signIn() {
   const email = $(`#email`).val();
   const password = $(`#password`).val();
 
+  if (!email || !password) {
+    alert("Please enter an email and password to sign in.");
+    return;
+  }
+
   auth.signInWithEmailAndPassword(email, password).catch((error) => {
     alert(error.message)
   });
@@ -24,8 +29,13 @@ function createAccount() {
   const email = $(`#email`).val();
   const password = $(`#password`).val();
 
+  if (!email || !password) {
+    alert("Please enter an email and password to register.");
+    return;
+  }
+
   auth.createUserWithEmailAndPassword(email, password).catch((error) => {
-    alert(error.message)
+    alert(error.message.replace("Firebase: ", ""))
   });
 }
 
