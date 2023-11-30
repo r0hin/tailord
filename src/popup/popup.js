@@ -10,9 +10,18 @@ window.user = null;
 window.cacheUser = null;
 
 onAuthStateChanged(auth, user => {
+  window.user = user;
   if (user && user.email) {
     $(`#signedIn`).removeClass("hidden");
     $(`#signedOut`).addClass("hidden");
+
+    loadMeasurements(user);
+    chrome.tabs.query({active:true,currentWindow:true}, function(tab){
+      $(`#siginedtext`).text(`Signed in on ${tab[0].url}`)
+    });
+    
+    $(`#measurementsTabButton`).removeClass("hidden")
+    $(`#scanTabButton`).removeClass("hidden")
 
     // TO CHANGE BACK TO USER.UID
     chrome.storage.sync.set({'uid': user.uid}, function() {
@@ -25,26 +34,104 @@ onAuthStateChanged(auth, user => {
     $(`#signedOut`).removeClass("hidden");
     $(`#signedIn`).addClass("hidden");
 
-    // Basically sign in anonymously
-    signInAnonymously(auth)
-    $(`#email`).text("Guest")
-  }
-
-  if (user && user.uid) {
-    // Get measurements
-    loadMeasurements(user);
-
-    chrome.tabs.query({active:true,currentWindow:true}, function(tab){
-      //Be aware that `tab` is an array of Tabs 
-      $(`#siginedtext`).text(`Signed in on ${tab[0].url}`)
-    });
-
-    window.user = user;
+    switchTab("settings")
+    $(`#measurementsTabButton`).addClass("hidden")
+    $(`#scanTabButton`).addClass("hidden")
   }
 });
 
 async function loadMeasurements(user) {
   onSnapshot(doc(db, `users/${user.uid}`), async (userDoc) => {
+    if (!userDoc.exists()) {
+      await setDoc(doc(db, `users/${user.uid}`), {
+        "measurements": {"measurement": [{
+          "displayName":"Back chest width",
+          "description":"Linear horizontal distance between the extreme two back chest points, following the body",
+          "valueIninch":"Unset",
+          "pointName":"backchestwidth"
+        },
+        {
+          "displayName":"Chest girth",
+          "valueIninch":"Unset",
+          "pointName":"chest",
+          "description":"Horizontal girth around the chest, passing over the nipples"
+        },
+        {
+          "description":"Vertical distance from cervical point to the foot",
+          "pointName":"cervicallength",
+          "valueIninch":"Unset",
+          "displayName":"Cervical length"
+        },
+        {
+          "displayName":"Upper neck girth",
+          "description":"Horizontal girth around the mid-neck",
+          "pointName":"upperneck",
+          "valueIninch":"Unset"
+        },
+        {
+          "displayName":"Natural waist girth",
+          "valueIninch":"Unset",
+          "pointName":"naturalwaistgirth",
+          "description":"Horizontal girth around the narrowest waist point"
+        },
+        {
+          "description":"Maximum horizontal girth around the hip",
+          "valueIninch":"Unset",
+          "displayName":"Hip girth",
+          "pointName":"hip"
+        },
+        {
+          "valueIninch":"Unset",
+          "displayName":"Shoulder across",
+          "pointName":"shoulderacross",
+          "description":"Horizontal curved length between two shoulder points"
+        },
+        {
+          "valueIninch":"Unset",
+          "description":"Linear distance between shoulder point and wrist bone",
+          "pointName":"armslength",
+          "displayName":"Arm length"
+        },
+        {
+          "valueIncm":"76.5 cm",
+          "pointName":"centerbacklength",
+          "description":"Vertical distance from cervical point to the crotch point",
+          "valueIninch":"Unset",
+          "displayName":"Center back length"
+        },
+        {
+          "description":"Distance from the cervical point to mid-palm",
+          "displayName":"Full sleeve length",
+          "valueIninch":"Unset",
+          "pointName":"sleevelengthfull"
+        },
+        {
+          "valueIninch":"Unset",
+          "displayName":"Waist girth",
+          "description":"Horizontal girth around the waist line",
+          "pointName":"waist"
+        },
+        {
+          "pointName":"sleevelength",
+          "displayName":"Sleeve length",
+          "description":"Linear distance from the shoulder point to mid-palm",
+          "valueIninch":"Unset"
+        },
+        {
+          "pointName":"leglength",
+          "valueIninch":"Unset",
+          "displayName":"Leg length",
+          "description":"Vertical distance from waist bone point to the foot - just above the ground."
+        }],
+        "emailId":"",
+        "age":"Unset",
+        "weight":"Unset",
+        "name":"",
+        "gender":"Unset",
+        "height":"Unset"}
+      });
+    }
+    
     cacheUser = userDoc.data();
 
     // Import sample data
@@ -55,14 +142,25 @@ async function loadMeasurements(user) {
     // });
 
     if (userDoc.exists() && Object.keys(userDoc.data().measurements || {}).length) {
-      // Measurements exist
-      $(`#noMeasurements`).addClass("hidden");
-      $(`#yesMeasurements`).removeClass("hidden");
-      $(`#beginScanButton`).html(`Scan Again`);
+      // Make sure valueIninch is not "Unset"
+      let anyUnset = false;
+      userDoc.data().measurements.measurement.forEach((measurement) => {
+        if (measurement.valueIninch.toLowerCase() == "unset") {
+          anyUnset = true;
+        }
+      })
 
-      if (Object.keys(userDoc.data().measurements).length) {
-        $(`#measurementsTabButton`).removeClass("hidden");
+      if (!anyUnset) {
+        // Measurements exist
+        $(`#noMeasurements`).addClass("hidden");
+        $(`#yesMeasurements`).removeClass("hidden");
+        $(`#beginScanButton`).html(`Scan Again`);
       }
+
+
+      // if (Object.keys(userDoc.data().measurements).length) {
+        // $(`#measurementsTabButton`).removeClass("hidden");
+      // }
 
       // Populate measurements
       $(`#age`).text(userDoc.data().measurements.age);
@@ -76,15 +174,61 @@ async function loadMeasurements(user) {
       $(`#measurementTable`).append(`
         <tr>
           <th>Measurement</th>
-          <th>Value (In)</th>
+          <th>Value (Inch)</th>
         </tr>
       `)
+
+      $(`#age`).get(0).onclick = () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = prompt(`Enter a new value for age.`);
+        if (newValue && parseFloat(newValue)) {
+          measurements.age = newValue;
+          updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#height`).get(0).onclick = () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = prompt(`Enter a new value for height in cm.`);
+        if (newValue && parseFloat(newValue)) {
+          measurements.height = newValue;
+          updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#weight`).get(0).onclick = () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = prompt(`Enter a new value for your weight (mass) in kg.`);
+        if (newValue && parseFloat(newValue)) {
+          measurements.weight = newValue;
+          updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#gender`).get(0).onclick = () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = prompt(`Enter a new value for your gender (male/female)`);
+        if (newValue && (newValue.toLowerCase() == "male" || newValue.toLowerCase() == "female")) {
+          measurements.gender = newValue.toLowerCase();
+          updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+
 
       userDoc.data().measurements.measurement.forEach((measurement) => {
         $(`#measurementTable`).append(`
           <tr>
             <td class="measurementTableNameCell"><i id="infoButton${measurement.pointName}" class="bx bx-info-circle"></i> ${measurement.displayName}</td>
-            <td class="editableCell" id="${measurement.pointName}editable">${Math.ceil(parseFloat(measurement.valueIninch))}</td>
+            <td class="editableCell" id="${measurement.pointName}editable">${Math.ceil(parseFloat(measurement.valueIninch)) || "Unset"}</td>
           </tr>
         `)
 
@@ -119,7 +263,7 @@ async function loadMeasurements(user) {
       $(`#noMeasurements`).removeClass("hidden");
       $(`#yesMeasurements`).addClass("hidden");
       $(`#beginScanButton`).html(`Create a Scan`);
-      $(`#measurementsTabButton`).addClass("hidden");
+      // $(`#measurementsTabButton`).addClass("hidden");
     }
 
     if (userDoc.exists() && userDoc.data().latest_access_code) {
@@ -224,28 +368,8 @@ $(`#signInButton`).get(0).onclick = async () => {
     alert("Please enter an email and password to sign in.");
     return;
   }
-
-  let toPreserveMeasurements = false;
-  const measurements = cacheUser ? cacheUser.measurements : null;
-
-  // If already have measurements
-  if (cacheUser && Object.keys(cacheUser.measurements || {}).length) {
-    toPreserveMeasurements = true;
-  }
-
-  console.log(toPreserveMeasurements, measurements)
   try {    
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-
-    const existingUserDoc = await getDoc(doc(db, `users/${credential.user.uid}`));
-    if (toPreserveMeasurements && (measurements !== null)) {
-      if (!existingUserDoc.exists() || !existingUserDoc.data().measurements) {
-        // No measurements exist
-        await setDoc(doc(db, `users/${credential.user.uid}`), {
-          measurements: measurements,
-        });
-      }
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     alert(error.message.replace("Firebase: ", ""));
   }
@@ -260,26 +384,8 @@ $(`#signUpButton`).get(0).onclick = async () => {
     return;
   }
 
-  let toPreserveMeasurements = false;
-  const measurements = cacheUser ? cacheUser.measurements : null;
-
-  // If already have measurements
-  if (cacheUser && Object.keys(cacheUser.measurements || {}).length) {
-    toPreserveMeasurements = true;
-  }
-
   try {
-    const credential = await createUserWithEmailAndPassword(auth, email, password);
-
-    const existingUserDoc = await getDoc(doc(db, `users/${credential.user.uid}`));
-    if (toPreserveMeasurements && (measurements !== null)) {
-      if (!existingUserDoc.exists() || !existingUserDoc.data().measurements) {
-        // No measurements exist
-        await setDoc(doc(db, `users/${credential.user.uid}`), {
-          measurements: measurements,
-        });
-      }
-    }
+    await createUserWithEmailAndPassword(auth, email, password);
   } catch (error) {
     alert(error.message.replace("Firebase: ", ""));
   }
