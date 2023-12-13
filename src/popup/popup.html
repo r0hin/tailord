@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <div class="tab animated fadeIn" id="scanTab">
+  <div class="tab hidden animated fadeIn" id="scanTab">
 
     <div id="measurements"></div>
       <div id="notScanning">
@@ -55,7 +55,7 @@
       </div>
     </div>
   </div>
-  <div class="tab hidden animated fadeIn" id="measurementsTab">
+  <div class="tab animated fadeIn" id="measurementsTab">
     <table>
       <tr>
         <th>Property</th>
@@ -122,8 +122,8 @@
   </div>
 
   <div id="footerBar">
-    <button id="scanTabButton" class="footerButton active"><i class="bx bx-scan"></i>Scan</button>
-    <button id="measurementsTabButton" class="footerButton"><i class="bx bx-clipboard"></i>Scans</button>
+    <button id="scanTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
+    <button id="measurementsTabButton" class="footerButton active"><i class="bx bx-clipboard"></i>Scans</button>
     <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
   </div>
   <script defer src="./popup.js"></script>
