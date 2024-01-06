@@ -238,8 +238,13 @@ button.primary:active {
 
 #deleteAccountButton {
   background-color: transparent;
-  color: red;
+  color: black;
+  font-size: small;
   opacity: 0.3;
+  padding: 0px;
+  outline: none;
+  border: none;
+  cursor: crosshair
 }
 
 .bottomAligned {
@@ -285,6 +290,11 @@ th, td {
 
 .editableCell {
   cursor: pointer;
+}
+
+.editableCell > input {
+  background-color: transparent;
+  border: none;
 }
 
 .editableCell:hover {

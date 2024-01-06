@@ -63,23 +63,30 @@
       </tr>
       <tr>
         <td>Age</td>
-        <td class="editableCell" id="age">...</td>
+        <td class="editableCell"><input type="text" id="age"></td>
       </tr>
       <tr>
         <td>Height</td>
-        <td class="editableCell" id="height">...</td>
+        <td class="editableCell"><input type="text" id="height"></td>
       </tr>
       <tr>
         <td>Weight</td>
-        <td class="editableCell" id="weight">...</td>
+        <td class="editableCell"><input type="text" id="weight"></td>
       </tr>
       <tr>
         <td>Gender</td>
-        <td class="editableCell" id="gender">...</td>
+        <td class="editableCell">
+          <select name="" id="gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
+        </td>
       </tr>
     </table>
     <br>
     <table id="measurementTable"></table>
+    <br>
+    <table id="nonRequiredMeasurementTable"></table>
   </div>
   <div class="tab hidden animated fadeIn" id="settingsTab">
 
@@ -106,17 +113,17 @@
       <div class="userProfile">
         <img src="https://firebasestorage.googleapis.com/v0/b/tailord5.appspot.com/o/default.png?alt=media" alt="">
         <div>
-          <b>Signed in as</b>
+          <b>Signed In</b>
           <div id="email">...</div>
         </div>
       </div>
-
-      <button class="primary" id="contactSupport">Contact Support</button>
+      <br>
+      <button class="primary" id="contactSupport">Get Support</button>
       <button class="primary" id="signOut">Sign Out</button>
       
       <div class="bottomAligned">
-        By using TailorD, you agree to the <a href="https://tailord.ca/privacy.html">Privacy Policy</a>.
-          <button class="primary" id="deleteAccountButton">Clear data and delete account</button>
+        By using TailorD, you agree to the <a target="_blank" href="https://tailord.ca/more/privacy">Privacy Policy</a>.
+          <button id="deleteAccountButton">Clear data and delete account</button>
       </div>
     </div>
   </div>

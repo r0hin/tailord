@@ -163,78 +163,95 @@ async function loadMeasurements(user) {
       // }
 
       // Populate measurements
-      $(`#age`).text(userDoc.data().measurements.age);
-      $(`#height`).text(userDoc.data().measurements.height);
-      $(`#weight`).text(userDoc.data().measurements.weight);
-      const gender = userDoc.data().measurements.gender;
-      const cpitalizedGender = gender.charAt(0).toUpperCase() + gender.slice(1);
-      $(`#gender`).text(cpitalizedGender);
+      $(`#age`).val(userDoc.data().measurements.age);
+      $(`#height`).val(userDoc.data().measurements.height);
+      $(`#weight`).val(userDoc.data().measurements.weight);
+      $(`#gender`).val(userDoc.data().measurements.gender);
 
-      $(`#measurementTable`).empty();
-      $(`#measurementTable`).append(`
-        <tr>
-          <th>Measurement</th>
-          <th>Value (Inch)</th>
-        </tr>
-      `)
-
-      $(`#age`).get(0).onclick = () => {
-        let measurements = userDoc.data().measurements;
-        const newValue = prompt(`Enter a new value for age.`);
-        if (newValue && parseFloat(newValue)) {
-          measurements.age = newValue;
-          updateDoc(doc(db, `users/${user.uid}`), {
-            measurements: measurements,
-          });
-        }
-      }
-
-      $(`#height`).get(0).onclick = () => {
-        let measurements = userDoc.data().measurements;
-        const newValue = prompt(`Enter a new value for height in cm.`);
-        if (newValue && parseFloat(newValue)) {
-          measurements.height = newValue;
-          updateDoc(doc(db, `users/${user.uid}`), {
-            measurements: measurements,
-          });
-        }
-      }
-
-      $(`#weight`).get(0).onclick = () => {
-        let measurements = userDoc.data().measurements;
-        const newValue = prompt(`Enter a new value for your weight (mass) in kg.`);
-        if (newValue && parseFloat(newValue)) {
-          measurements.weight = newValue;
-          updateDoc(doc(db, `users/${user.uid}`), {
-            measurements: measurements,
-          });
-        }
-      }
-
-      $(`#gender`).get(0).onclick = () => {
-        let measurements = userDoc.data().measurements;
-        const newValue = prompt(`Enter a new value for your gender (male/female)`);
-        if (newValue && (newValue.toLowerCase() == "male" || newValue.toLowerCase() == "female")) {
-          measurements.gender = newValue.toLowerCase();
-          updateDoc(doc(db, `users/${user.uid}`), {
-            measurements: measurements,
-          });
-        }
-      }
-
-
-
-      userDoc.data().measurements.measurement.forEach((measurement) => {
+      if (!$(`#measurementTable`).children().length) {
         $(`#measurementTable`).append(`
           <tr>
+            <th>Required Measurement</th>
+            <th>Value (Inches)</th>
+          </tr>
+        `)
+  
+        $(`#nonRequiredMeasurementTable`).append(`
+          <tr>
+            <th>Optional Measurement</th>
+            <th>Value (Inches)</th>
+          </tr>
+        `)
+      }
+
+      $(`#age`).get(0).oninput = async () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = $(`#age`).val();
+        if (newValue && parseFloat(newValue)) {
+          measurements.age = newValue;
+          await updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#height`).get(0).oninput = async () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = $(`#height`).val();
+        if (newValue && parseFloat(newValue)) {
+          measurements.height = newValue;
+          await updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#weight`).get(0).oninput = async () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = $(`#weight`).val();
+        if (newValue && parseFloat(newValue)) {
+          measurements.weight = newValue;
+          await updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      $(`#gender`).get(0).oninput = async () => {
+        let measurements = userDoc.data().measurements;
+        const newValue = $(`#gender`).val();
+        if (newValue && (newValue.toLowerCase() == "male" || newValue.toLowerCase() == "female")) {
+          measurements.gender = newValue.toLowerCase();
+          await updateDoc(doc(db, `users/${user.uid}`), {
+            measurements: measurements,
+          });
+        }
+      }
+
+      userDoc.data().measurements.measurement.forEach((measurement) => {
+        if ($(`#${measurement.pointName}editable`).length) {
+          return;
+        }
+
+        let tgt = `measurementTable`;
+        let required = ["chest", "hip", "waist", "armslength"];
+        if (!required.includes(measurement.pointName)) {
+          tgt = `nonRequiredMeasurementTable`;
+        }
+
+        $(`#${tgt}`).append(`
+          <tr>
             <td class="measurementTableNameCell"><i id="infoButton${measurement.pointName}" class="bx bx-info-circle"></i> ${measurement.displayName}</td>
-            <td class="editableCell" id="${measurement.pointName}editable">${Math.ceil(parseFloat(measurement.valueIninch)) || "Unset"}</td>
+            <td class="editableCell" id="${measurement.pointName}editable"><input id="${measurement.pointName}input" value="${Math.ceil(parseFloat(measurement.valueIninch)) || "Unset"}" /></td>
+          </tr>
+          <tr class="hidden" id="${measurement.pointName}infoCell">
+            <td colspan="2">${measurement.description}</td>
           </tr>
         `)
 
-        $(`#${measurement.pointName}editable`).get(0).onclick = async () => {
+        $(`#${measurement.pointName}input`).get(0).oninput = async () => {
           let measurements = userDoc.data().measurements;
-          const newValue = prompt(`Enter a new value for ${measurement.displayName} in inches.`);
+          const newValue = $(`#${measurement.pointName}input`).val();
 
           if (newValue && parseFloat(newValue)) {
             measurements.measurement.forEach((measurementCheck) => {
@@ -253,7 +270,7 @@ async function loadMeasurements(user) {
         }
 
         $(`#infoButton${measurement.pointName}`).get(0).onclick = () => {
-          alert(measurement.description);
+          $(`#${measurement.pointName}infoCell`).toggleClass("hidden");
         }
       })
 
