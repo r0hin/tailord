@@ -1,5 +1,4 @@
 const { onRequest } = require("firebase-functions/v2/https");
-// Import functions v1
 const functions = require('firebase-functions/v1')
 
 const { initializeApp } = require("firebase-admin/app")
@@ -31,7 +30,6 @@ exports.getMeasurements = onRequest(async (request, response) => {
 
 exports.sendWelcomeEmail = functions.auth.user().onCreate((user) => {
   const email = user.email;
-
-  console.log(email)
+  console.log(`TODO: Send welcome email to ${email}`)
   // Send welcome email
 })
