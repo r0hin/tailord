@@ -10,6 +10,8 @@
   <link href="./css/start.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 </head>
 
 <body>
@@ -26,12 +28,12 @@
 
     <section class="landing">
       <div class="landingText">
-        <h1 data-aos="fade-up">Let's get you setup!</h1>
-        <br><br>
+        <h1 data-aos="fade-up">Know your size every time.</h1>
       </div>
     </section>
 
     <div id="signedOut" class="hidden">
+      <br><br>
       <div class="form">
         <input placeholder="Email" id="email">
         <input placeholder="Password" type="password" id="password">
@@ -44,7 +46,109 @@
       </div>
     </div>
     <div id="signedIn" class="hidden">
-      <p id="note"></p>
+      <div id="notsetup" class="hidden">
+        <p>Welcome to TailorD! Let's get you setup.</p>
+        <div id="step1">
+          <p>Select how you'd like to upload your measurements:</p>
+          <div class="row">
+            <br><br>
+            <button id="scanYourselfButton">
+              <i class="bx bx-camera"></i>
+              Scan Yourself
+            </button>
+            <button id="inputManuallyButton">
+              <i class="bx bx-clipboard"></i>
+              Input Manually
+            </button>
+          </div>
+        </div>
+          
+        <div id="scanFlow1" class="hidden">
+          <p>Scan this QR code on your mobile phone. When you're done scanning, select complete scan.</p>
+          <center>
+            <div id="qrcode"></div>
+          </center>
+          <div class="row">
+            <button id="returnHome" class="">Back</button>
+            <button id="completeScan" class="">Complete Scan</button>
+          </div>
+        </div>
+
+        <div id="inputFlow1" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <input type="number" placeholder="Age" id="age">
+            <select name="" id="gender">
+              <option value="" disabled selected>Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </center>
+
+          <div class="row">
+            <button id="returnHome2" class="">Back</button>
+            <button onclick="inputFlowNext()" class="">Next</button>
+          </div>
+        </div>
+        <div id="inputFlow2" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <input type="number" placeholder="Height (cm)" id="height">
+            <input type="number" placeholder="Weight (kg)" id="weight">
+          </center>
+          <div class="row">
+            <button onclick="inputFlowBack()" class="">Back</button>
+            <button onclick="inputFlowNext()" class="">Next</button>
+          </div>
+        </div>
+        <div id="inputFlow3" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <p>Horizontal girth around the chest, passing over the nipples</p>
+            <input type="number" placeholder="Chest Girth (in)" id="chest">
+          </center>
+          <div class="row">
+            <button onclick="inputFlowBack()" class="">Back</button>
+            <button onclick="inputFlowNext()" class="">Next</button>
+          </div>
+        </div>
+        <div id="inputFlow4" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <p>Maximum horizontal girth around the hip</p>
+            <input type="number" placeholder="Hip Girth (in)" id="hip">
+          </center>
+          <div class="row">
+            <button onclick="inputFlowBack()" class="">Back</button>
+            <button onclick="inputFlowNext()" class="">Next</button>
+          </div>
+        </div>
+        <div id="inputFlow5" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <p>Linear distance between shoulder point and wrist bone</p>
+            <input type="number" placeholder="Arm Length (in)" id="arm">
+          </center>
+          <div class="row">
+            <button onclick="inputFlowBack()" class="">Back</button>
+            <button onclick="inputFlowNext()" class="">Next</button>
+          </div>
+        </div>
+        <div id="inputFlow6" class="hidden inputFlow">
+          <center>
+            <br><br>
+            <p>Horizontal girth around the waist line</p>
+            <input type="number" placeholder="Waist Girth (in)" id="waist">
+          </center>
+          <div class="row">
+            <button onclick="inputFlowBack()" class="">Back</button>
+            <button id="finalizeInputData" class="">Save</button>
+          </div>
+        </div>
+      </div>
+      <div id="setup" class="hidden">
+        <p>Your measurements were saved – you can now start using the extension!</p>
+      </div>
     </div>
 
   </div>
@@ -84,6 +188,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-auth-compat.js"></script>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="./js/qr.js"></script>
   <script src="./js/index.js"></script>
   <script src="./js/start.js"></script>
 

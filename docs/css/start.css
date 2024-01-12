@@ -32,3 +32,60 @@ input {
 .hidden {
   display: none !important;
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.row > button {
+  /* Large buttons */
+  padding: 24px 48px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  margin: 12px;
+  cursor: pointer;
+  background-color: white;
+  border: 2px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.row > button:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.row > button i {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+#qrcode {
+  margin-bottom: 24px;
+}
+
+input {
+  padding: 12px;
+  width: 272px;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--gray);
+  margin-bottom: 12px;
+}
+
+select {
+  padding: 12px;
+  width: 296px;
+  display: block;
+  border-radius: 12px;
+  border: 1px solid var(--gray);
+  margin-bottom: 12px;
+}

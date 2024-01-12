@@ -197,8 +197,16 @@ section.colored h1 {
     flex-direction: column;
   }
 
+  nav > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
   .navLink {
-    margin-right: 0px !important;
+    margin: 0px 16px;
   }
 
   nav img {
@@ -273,6 +281,6 @@ a {
   }
 
   nav > div > * {
-    margin-bottom: 12px;
+    margin-bottom: 12px !important;
   }
 }

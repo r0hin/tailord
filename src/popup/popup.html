@@ -16,122 +16,127 @@
 </head>
 
 <body>
-  <div class="tab hidden animated fadeIn" id="scanTab">
-
-    <div id="measurements"></div>
-      <div id="notScanning">
-        <div id="noMeasurements" class="hidden">
-          <div class="scanTabTool">
-            <i class="bx bx-camera"></i>
-            You have no measurements saved. Scan the QR code below on your smartphone to quickly get measured.
+  <div id="setup" class="hidden animated fadeIn">
+    <div class="tab hidden animated fadeIn" id="scanTab">
+      <div id="measurements"></div>
+        <div id="notScanning">
+          <div id="noMeasurements" class="hidden">
+            <div class="scanTabTool">
+              <i class="bx bx-camera"></i>
+              You have no measurements saved. Scan the QR code below on your smartphone to quickly get measured.
+            </div>
+            <div class="scanTabTool">
+              <i class="bx bxs-t-shirt"></i>
+              After you're measured, you will be able to view your measurements here and get size recommendations on select clothing retailers.
+            </div>
+          </div> 
+          <div id="yesMeasurements" class="hidden">
+            <div class="scanTabTool">
+              <i class="bx bx-check"></i>
+              Your body measurements are loaded! You can always redo your scans below. View your measurements by selecting the <i class="bx bx-clipboard"></i> tab
+            </div>
+            <div class="scanTabTool">
+              <i class="bx bx-help-circle"></i>
+              Visit our website at tailord.ca for more information and the complete supported retailer list.
+            </div>
+          </div> 
+          <br>
+          <div class="row">
+            <button id="beginScanButton" class="scanButton">New Scan</button>
           </div>
-          
-          <div class="scanTabTool">
-            <i class="bx bxs-t-shirt"></i>
-            After you're measured, you will be able to view your measurements here and get size recommendations on select clothing retailers.
-          </div>
-
-
-        </div> 
-        <div id="yesMeasurements" class="hidden">
-          <div class="scanTabTool">
-            <i class="bx bx-check"></i>
-            Your body measurements are loaded! You can always redo your scans below. View your measurements by selecting the <i class="bx bx-clipboard"></i> tab
-          </div>
-          <div class="scanTabTool">
-            <i class="bx bx-help-circle"></i>
-            Visit our website at tailord.ca for more information and the complete supported retailer list.
-          </div>
-        </div> 
-        <br>
-        <div class="row">
-          <button id="beginScanButton" class="scanButton">Create a Scan</button>
         </div>
-      </div>
-      <div id="scanning" class="hidden">
-        <canvas id="qrCode"></canvas>
-        <p>Scan this QR code on your phone. When you're finished measuring, select the button below.</p>
-        <button id="endScanButton" class="scanButton">Complete Scan</button>
-      </div>
+        <div id="scanning" class="hidden">
+          <canvas id="qrCode"></canvas>
+          <p>Scan this QR code on your phone. When you're finished measuring, select the button below.</p>
+          <button id="endScanButton" class="scanButton">Complete Scan</button>
+        </div>
     </div>
-  </div>
-  <div class="tab animated fadeIn" id="measurementsTab">
-    <table>
-      <tr>
-        <th>Property</th>
-        <th>Value</th>
-      </tr>
-      <tr>
-        <td>Age</td>
-        <td class="editableCell"><input type="text" id="age"></td>
-      </tr>
-      <tr>
-        <td>Height</td>
-        <td class="editableCell"><input type="text" id="height"></td>
-      </tr>
-      <tr>
-        <td>Weight</td>
-        <td class="editableCell"><input type="text" id="weight"></td>
-      </tr>
-      <tr>
-        <td>Gender</td>
-        <td class="editableCell">
-          <select name="" id="gender">
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-    <br>
-    <table id="measurementTable"></table>
-    <br>
-    <table id="nonRequiredMeasurementTable"></table>
-  </div>
-  <div class="tab hidden animated fadeIn" id="settingsTab">
-
-    <div id="signedOut" class="hidden animated fadeIn">
-      <center>
-        <br><br><br>
-        <h1 class="title mainTitle animated fadeInDown fast">TailorD</h1>
-        <p class="tagline animated fadeIn delay-1s">Sign in to sync your measurements across devices!</p>
-        <br><br>
-        <div class="loginContainer animated fadeInDown delay-1s">
-          <input id="emailBox" class="loginBox" type="text" placeholder="Email Address" />
-          <input id="passwordBox" class="loginBox" type="password" placeholder="Password" />
-          <div class="loginButtons">
-            <button id="signUpButton" class="primary">Signup</button>
-            <button id="signInButton" class="primary">Login</button>
-          </div>
-          <br><br>
-          By using TailorD, you agree to the <a href="https://tailord.ca/privacy.html">Privacy Policy</a>.
-        </div>
-      </center>
-    </div>
-    <div id="signedIn" class="hidden animated fadeIn">
-      
-      <div class="userProfile">
-        <img src="https://firebasestorage.googleapis.com/v0/b/tailord5.appspot.com/o/default.png?alt=media" alt="">
-        <div>
-          <b>Signed In</b>
-          <div id="email">...</div>
-        </div>
-      </div>
+    <div class="tab animated fadeIn" id="measurementsTab">
+      <table>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+        <tr>
+          <td>Age</td>
+          <td class="editableCell"><input type="text" id="age"></td>
+        </tr>
+        <tr>
+          <td>Height</td>
+          <td class="editableCell"><input type="text" id="height"></td>
+        </tr>
+        <tr>
+          <td>Weight</td>
+          <td class="editableCell"><input type="text" id="weight"></td>
+        </tr>
+        <tr>
+          <td>Gender</td>
+          <td class="editableCell">
+            <select name="" id="gender">
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </td>
+        </tr>
+      </table>
       <br>
-      <button class="primary" id="contactSupport">Get Support</button>
-      <button class="primary" id="signOut">Sign Out</button>
-      
-      <div class="bottomAligned">
-        By using TailorD, you agree to the <a target="_blank" href="https://tailord.ca/more/privacy">Privacy Policy</a>.
-          <button id="deleteAccountButton">Clear data and delete account</button>
+      <table id="measurementTable"></table>
+      <br>
+      <table id="nonRequiredMeasurementTable"></table>
+      <br><br>
+      <br><br>
+      <br><br>
+    </div>
+    <div class="tab hidden animated fadeIn" id="settingsTab">
+      <div id="signedOut" class="hidden animated fadeIn">
+        <center>
+          <br><br><br>
+          <h1 class="title mainTitle animated fadeInDown fast">TailorD</h1>
+          <p class="tagline animated fadeIn delay-1s">Sign in to sync your measurements across devices!</p>
+          <br><br>
+          <div class="loginContainer animated fadeInDown delay-1s">
+            <input id="emailBox" class="loginBox" type="text" placeholder="Email Address" />
+            <input id="passwordBox" class="loginBox" type="password" placeholder="Password" />
+            <div class="loginButtons">
+              <button id="signUpButton" class="primary">Signup</button>
+              <button id="signInButton" class="primary">Login</button>
+            </div>
+            <br><br>
+            By using TailorD, you agree to the <a href="https://tailord.ca/privacy.html">Privacy Policy</a>.
+          </div>
+        </center>
+      </div>
+      <div id="signedIn" class="hidden animated fadeIn">
+        <div class="userProfile">
+          <img src="https://firebasestorage.googleapis.com/v0/b/tailord5.appspot.com/o/default.png?alt=media" alt="">
+          <div>
+            <b>Signed In</b>
+            <div id="email">...</div>
+          </div>
+        </div>
+        <br>
+        <button class="primary" id="contactSupport">Get Support</button>
+        <button class="primary" id="signOut">Sign Out</button>
+        
+        <div class="bottomAligned">
+          By using TailorD, you agree to the <a target="_blank" href="https://tailord.ca/more/privacy">Privacy Policy</a>.
+            <button id="deleteAccountButton">Clear data and delete account</button>
+        </div>
       </div>
     </div>
+  
+    <div id="footerBar">
+      <button id="scanTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
+      <button id="measurementsTabButton" class="footerButton active"><i class="bx bx-clipboard"></i>Scans</button>
+      <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
+    </div>
   </div>
-
-  <div id="footerBar">
-    <button id="scanTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
-    <button id="measurementsTabButton" class="footerButton active"><i class="bx bx-clipboard"></i>Scans</button>
-    <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
+  <div id="notsetup" class="hidden animated fadeIn">
+    <center>
+      <br><br><br>
+      <h1>Welcome to TailorD!</h1>
+      <button id="openStartPage" class="primary">Get Started</button>
+    </center>
   </div>
   <script defer src="./popup.js"></script>
 </body>

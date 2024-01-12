@@ -44,6 +44,7 @@ async function loadMeasurements(user) {
   onSnapshot(doc(db, `users/${user.uid}`), async (userDoc) => {
     if (!userDoc.exists()) {
       await setDoc(doc(db, `users/${user.uid}`), {
+        setup: false,
         "measurements": {"measurement": [{
           "displayName":"Back chest width",
           "description":"Linear horizontal distance between the extreme two back chest points, following the body",
@@ -93,7 +94,6 @@ async function loadMeasurements(user) {
           "displayName":"Arm length"
         },
         {
-          "valueIncm":"76.5 cm",
           "pointName":"centerbacklength",
           "description":"Vertical distance from cervical point to the crotch point",
           "valueIninch":"Unset",
@@ -131,6 +131,7 @@ async function loadMeasurements(user) {
         "height":"Unset"}
       });
     }
+
     
     cacheUser = userDoc.data();
 
@@ -283,6 +284,15 @@ async function loadMeasurements(user) {
       // $(`#measurementsTabButton`).addClass("hidden");
     }
 
+    if (userDoc.exists() && (userDoc.data().setup === false)) {
+      $(`#notsetup`).removeClass("hidden");
+      $(`#setup`).addClass("hidden");
+    }
+    else {
+      $(`#notsetup`).addClass("hidden");
+      $(`#setup`).removeClass("hidden");
+    }
+
     if (userDoc.exists() && userDoc.data().latest_access_code) {
       $(`#scanning`).removeClass("hidden");
       $(`#notScanning`).addClass("hidden");
@@ -430,6 +440,10 @@ $(`#settingsTabButton`).get(0).onclick = () => {
 
 $(`#measurementsTabButton`).get(0).onclick = () => {
   switchTab("measurements");
+}
+
+$(`#openStartPage`).get(0).onclick = () => {
+  window.open("https://tailord.ca/start")
 }
 
 $(`#deleteAccountButton`).get(0).onclick = () => {
