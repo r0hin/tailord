@@ -1,6 +1,7 @@
 
 node_modules
 /dist
+dist.zip
 yarn.lock
 package-lock.json
 .DS_Store
