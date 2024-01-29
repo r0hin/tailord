@@ -32,6 +32,7 @@ onAuthStateChanged(auth, user => {
   else {
     $(`#signedOut`).removeClass("hidden");
     $(`#signedIn`).addClass("hidden");
+    $(`#notsetup`).removeClass("hidden");
 
     switchTab("settings")
     $(`#measurementsTabButton`).addClass("hidden")
@@ -282,7 +283,9 @@ async function loadMeasurements(user) {
       // $(`#measurementsTabButton`).addClass("hidden");
     }
 
+    console.log(userDoc.data().setup)
     if (userDoc.exists() && (userDoc.data().setup === false)) {
+      console.log('hi')
       $(`#notsetup`).removeClass("hidden");
       $(`#setup`).addClass("hidden");
     }
