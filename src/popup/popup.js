@@ -21,7 +21,6 @@ onAuthStateChanged(auth, user => {
     });
     
     $(`#measurementsTabButton`).removeClass("hidden")
-    $(`#scanTabButton`).removeClass("hidden")
 
     // TO CHANGE BACK TO USER.UID
     chrome.storage.sync.set({'uid': user.uid}, function() {
@@ -36,7 +35,6 @@ onAuthStateChanged(auth, user => {
 
     switchTab("settings")
     $(`#measurementsTabButton`).addClass("hidden")
-    $(`#scanTabButton`).addClass("hidden")
   }
 });
 
@@ -300,37 +298,6 @@ async function loadMeasurements(user) {
     }
   })
   
-  $(`#beginScanButton`).get(0).onclick = async () => {
-    if (!user.email) {
-      switchTab("settings");
-      return;
-    }
-
-    const response = await fetch(`https://api.user.mirrorsize.com/api/webBrowser/generateAccessCode/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        "apiKey": "jna56MCc6I8YQoD7ItKhJLcQSbqLK9s9FMv8xpBnllF9BV02TpyebdBFS2A63dkL",
-        "merchantID": "jacksdorr@gmail.com",
-        "productname": "GET_MEASURED",
-      })
-    });
-
-    $(`#scanning`).removeClass("hidden");
-    $(`#notScanning`).addClass("hidden");
-
-    const jsonData = await response.json();
-
-    const accessCode = jsonData.data.accessCode;
-
-    await setDoc(doc(db, `users/${user.uid}`), {
-      latest_access_code: accessCode,
-    }, {merge: true});
-
-    showQRCode(accessCode)
-  }
 }
 
 window.editMeasurement = (pointName) => {
@@ -350,41 +317,6 @@ function showQRCode(accessCode) {
   }, () => {});
 
   
-}
-
-$(`#endScanButton`).get(0).onclick = async () => {
-  $(`#scanning`).addClass("hidden");
-  $(`#notScanning`).removeClass("hidden");
-
-  const accessCode = cacheUser.latest_access_code;
-
-  const response = await fetch(`https://api.user.mirrorsize.com/api/webBrowser/getmeasurement`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      "apiKey": "jna56MCc6I8YQoD7ItKhJLcQSbqLK9s9FMv8xpBnllF9BV02TpyebdBFS2A63dkL",
-      "merchantID": "jacksdorr@gmail.com",
-      "accessCode": accessCode,
-    })
-  })
-
-  const jsonData = await response.json();
-  const data = jsonData.data;
-  console.log(data)
-  if (!data) {
-    alert("No measurements imported.")
-    updateDoc(doc(db, `users/${user.uid}`), {
-      latest_access_code: "",
-    });
-    return;
-  }
-  updateDoc(doc(db, `users/${user.uid}`), {
-    latest_access_code: "",
-    measurements: data,
-  });
-
 }
 
 $(`#signInButton`).get(0).onclick = async () => {
@@ -428,10 +360,6 @@ function switchTab(tab) {
 
   $(`.tab`).addClass("hidden");
   $(`#${tab}Tab`).removeClass("hidden");
-}
-
-$(`#scanTabButton`).get(0).onclick = () => {
-  switchTab("scan");
 }
 
 $(`#settingsTabButton`).get(0).onclick = () => {

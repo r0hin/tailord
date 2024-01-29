@@ -65,37 +65,37 @@ auth.onAuthStateChanged((user) => {
 });
 
 
-$(`#scanYourselfButton`).get(0).onclick = async () => {
-  $(`#step1`).addClass("hidden");
-  $(`#scanFlow1`).removeClass("hidden");
+// $(`#scanYourselfButton`).get(0).onclick = async () => {
+//   $(`#step1`).addClass("hidden");
+//   $(`#scanFlow1`).removeClass("hidden");
 
-  if (!accessCodeGenerated) {
-    const response = await fetch(`https://api.user.mirrorsize.com/api/webBrowser/generateAccessCode/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        "apiKey": "jna56MCc6I8YQoD7ItKhJLcQSbqLK9s9FMv8xpBnllF9BV02TpyebdBFS2A63dkL",
-        "merchantID": "jacksdorr@gmail.com",
-        "productname": "GET_MEASURED",
-      })
-    });
+//   if (!accessCodeGenerated) {
+//     const response = await fetch(`https://api.user.mirrorsize.com/api/webBrowser/generateAccessCode/`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json"
+//       },
+//       body: JSON.stringify({
+//         "apiKey": "jna56MCc6I8YQoD7ItKhJLcQSbqLK9s9FMv8xpBnllF9BV02TpyebdBFS2A63dkL",
+//         "merchantID": "jacksdorr@gmail.com",
+//         "productname": "GET_MEASURED",
+//       })
+//     });
 
-    $(`#scanning`).removeClass("hidden");
-    $(`#notScanning`).addClass("hidden");
+//     $(`#scanning`).removeClass("hidden");
+//     $(`#notScanning`).addClass("hidden");
 
-    const jsonData = await response.json();
+//     const jsonData = await response.json();
 
-    const accessCode = jsonData.data.accessCode;
+//     const accessCode = jsonData.data.accessCode;
 
-    await db.collection("users").doc(auth.currentUser.uid).set({
-      latest_access_code: accessCode,
-    }, {merge: true});
+//     await db.collection("users").doc(auth.currentUser.uid).set({
+//       latest_access_code: accessCode,
+//     }, {merge: true});
 
-    showQRCode(accessCode)
-  }
-}
+//     showQRCode(accessCode)
+//   }
+// }
 
 function showQRCode(accessCode) {
   const url = `https://user.mirrorsize.com/home/${accessCode}`;

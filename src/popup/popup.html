@@ -17,40 +17,6 @@
 
 <body>
   <div id="setup" class="hidden animated fadeIn">
-    <div class="tab hidden animated fadeIn" id="scanTab">
-      <div id="measurements"></div>
-        <div id="notScanning">
-          <div id="noMeasurements" class="hidden">
-            <div class="scanTabTool">
-              <i class="bx bx-camera"></i>
-              You have no measurements saved. Scan the QR code below on your smartphone to quickly get measured.
-            </div>
-            <div class="scanTabTool">
-              <i class="bx bxs-t-shirt"></i>
-              After you're measured, you will be able to view your measurements here and get size recommendations on select clothing retailers.
-            </div>
-          </div> 
-          <div id="yesMeasurements" class="hidden">
-            <div class="scanTabTool">
-              <i class="bx bx-check"></i>
-              Your body measurements are loaded! You can always redo your scans below. View your measurements by selecting the <i class="bx bx-clipboard"></i> tab
-            </div>
-            <div class="scanTabTool">
-              <i class="bx bx-help-circle"></i>
-              Visit our website at tailord.ca for more information and the complete supported retailer list.
-            </div>
-          </div> 
-          <br>
-          <div class="row">
-            <button id="beginScanButton" class="scanButton">New Scan</button>
-          </div>
-        </div>
-        <div id="scanning" class="hidden">
-          <canvas id="qrCode"></canvas>
-          <p>Scan this QR code on your phone. When you're finished measuring, select the button below.</p>
-          <button id="endScanButton" class="scanButton">Complete Scan</button>
-        </div>
-    </div>
     <div class="tab animated fadeIn" id="measurementsTab">
       <table>
         <tr>
@@ -126,9 +92,8 @@
     </div>
   
     <div id="footerBar">
-      <button id="scanTabButton" class="footerButton"><i class="bx bx-scan"></i>Scan</button>
-      <button id="measurementsTabButton" class="footerButton active"><i class="bx bx-clipboard"></i>Scans</button>
-      <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Account</button>
+      <button id="measurementsTabButton" class="footerButton active"><i class="bx bx-clipboard"></i>My Data</button>
+      <button id="settingsTabButton" class="footerButton"><i class="bx bx-cog"></i>Settings</button>
     </div>
   </div>
   <div id="notsetup" class="hidden animated fadeIn">
